@@ -28,6 +28,17 @@
             <artifactId>json-path</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.7</version>
+</dependency>
+        <dependency>
+            <groupId>org.apache.flume.flume-ng-clients</groupId>
+            <artifactId>flume-ng-log4jappender</artifactId>
+            <version>1.5.2.2.2.0.0-2041</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <properties>
