@@ -46,17 +46,18 @@ public class Utils {
         List<Dato> datos = new ArrayList<>();
 
         List<Simbolo> simbolos = new ArrayList<>();
-        List<Datum> data;
-        data = new ArrayList<Datum>();
+        List<Datum> data= new ArrayList<>();
         Boolean acept = null;
+        //Agregar simbolos al array
         for (int i = 2; i < automata[1].length; i++) {
             simbolos.add(new Simbolo().withSim(automata[0][i]));
         }
         p.setSimbolos(simbolos);
+        //Agregar las columnas con la aceptacion al array
         for (int k = 1; k < automata.length; k++) {
             for (int j = 0; j < automata[1].length; j++) {
             if(j==0){
-                data.add(j,new Datum().withEs(automata[k][j]));
+                data.add(new Datum().withEs(automata[k][j]));
             }else if(j==1){
                 if(automata[k][j].equals("0")){
                 acept=false;
@@ -64,16 +65,17 @@ public class Utils {
                     acept=true;
                 }
             }else{
-                data.add(j-1,new Datum().withEs(automata[k][j]));
+                data.add(new Datum().withEs(automata[k][j]));
             }
             
             }
             datos.add(new Dato().withData(data).withAcept(acept));
-            data=null;
+            data=new ArrayList<>();
             acept=null;
             
         }
         p.setDatos(datos);
+        
 
         return p;
     }

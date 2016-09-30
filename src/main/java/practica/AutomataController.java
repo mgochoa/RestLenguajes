@@ -31,6 +31,6 @@ public class AutomataController {
     public Pojo doSomething(@RequestBody Pojo input) throws IOException {
        
         
-        return input;
+        return Utils.AutomataToPojo(Utils.PojoToAutomata(input));
     }
 }
