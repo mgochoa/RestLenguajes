@@ -34,11 +34,4 @@ public class AutomataController {
         
         return Utils.AutomataToPojo(Utils.PojoToAutomata(input));
     }
-     @RequestMapping(value = "/isafnd", method = RequestMethod.POST)
-    @ResponseBody
-    public Boolean isAfnd(@RequestBody Pojo input) throws IOException {
-         AutomataFinito a = new AutomataFinito(Utils.PojoToAutomata(input));
-        
-        return a.isAFND();
-    }
 }

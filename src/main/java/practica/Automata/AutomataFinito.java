@@ -18,7 +18,6 @@ public class AutomataFinito {
     public AutomataFinito(String[][] automata) {
         this.automata = automata;
     }
-    
 
     public AutomataFinito() {//constructor de ejemplo 
         automata = new String[6][4];
@@ -109,22 +108,22 @@ public class AutomataFinito {
                 autoF[i][j] = nuevo[i][j];
             }
         }
-        
+
         for (int i = 2; i < autoF[0].length; i++) {
             autoF[0][i] = automata[0][i];
         }
-        
+
         for (int i = 1; i < autoF.length; i++) {
             autoF[i][0] = nuevo[i][0];
         }
-        
+
         int contador = 1;
         for (int i = 1; i < nuevo.length; i++) {
             if (!nuevo[i][0].equals("-")) {
                 for (int j = 2; j < nuevo[0].length; j++) {
                     autoF[contador][j] = nuevo[i][j];
-                    System.out.println("autoF["+contador+"]["+j+"] = "+autoF[contador][j]);
-                }                
+                    System.out.println("autoF[" + contador + "][" + j + "] = " + autoF[contador][j]);
+                }
                 contador++;
             }
         }
@@ -220,7 +219,7 @@ public class AutomataFinito {
                 VerificarTransiciones(aux1, i);
             }
         }
-        System.out.println("Particiones simplificadas: "+ valoresPorParticion);
+        System.out.println("Particiones simplificadas: " + valoresPorParticion);
         automata = CrearAutomataSimplificado();
         aux2 = "";
         System.out.println(aux2);
@@ -363,23 +362,46 @@ public class AutomataFinito {
 
         return nuevo;
     }
-    
-    
-    
-    public Boolean isAFND(){
-       
-        
-        for(int i=1; i<automata.length;i++){
-            for(int j=2;j<automata[1].length;j++){
-                if(automata[i][j].contains(",")){
+
+    public Boolean isAFND() {
+
+        for (int i = 1; i < automata.length; i++) {
+            for (int j = 2; j < automata[1].length; j++) {
+                if (automata[i][j].contains(",")) {
                     return true;
                 }
             }
-            
+
         }
-      return false;  
-        
-        
-     
+        return false;
+
     }
+
+   /*public void AFNDtoAFD() {
+        String[] row = new String[automata[1].length];
+        ArrayList<String[]> rows = new ArrayList<>();
+        String[] auxiliar;
+        for (int i = 0; i < automata.length; i++) {
+            for (int j = 0; j < automata[1].length; j++) {
+                if(i==0){
+                    row[i]=automata[i][j];
+                }else{
+                    if(j>2&&automata[i][j].contains(",")){
+                       auxiliar=automata[i][j].split(",");
+                       for(int k=0;k<auxiliar.length;k++){
+                           if(!ExisteEstado(auxiliar[k], automata)){
+                               //Aqui voy
+                           }
+                       }
+                    }
+                    
+                }
+
+            }
+            rows.add(row);
+            row = new String[automata[1].length];
+        }
+
+    }*/
+
 }
