@@ -377,31 +377,96 @@ public class AutomataFinito {
 
     }
 
-   /*public void AFNDtoAFD() {
+    /*public void AFNDtoAFD() {
         String[] row = new String[automata[1].length];
-        ArrayList<String[]> rows = new ArrayList<>();
-        String[] auxiliar;
-        for (int i = 0; i < automata.length; i++) {
-            for (int j = 0; j < automata[1].length; j++) {
-                if(i==0){
-                    row[i]=automata[i][j];
-                }else{
-                    if(j>2&&automata[i][j].contains(",")){
-                       auxiliar=automata[i][j].split(",");
-                       for(int k=0;k<auxiliar.length;k++){
-                           if(!ExisteEstado(auxiliar[k], automata)){
-                               //Aqui voy
-                           }
-                       }
+        ArrayList<String[]> rows;
+        rows = new ArrayList<>();
+        String[] auxiliar = null;
+        //Estados iniciales
+        for (int i = 0; i < automata[1].length; i++) {
+            row[i] = automata[0][i];
+
+        }
+        rows.add(row);
+        row = new String[automata[1].length];
+
+        for (int k = 0; k < automata[1].length; k++) {
+            if (k <= 1) {
+                row[k] = automata[1][k];
+            } else {
+
+                if (automata[1][k].contains(",")) {
+                    auxiliar = automata[1][k].split(",");
+                    row[k] = automata[1][k].replaceAll(",", "");
+                    agregarEstadosSeparados(auxiliar, rows);
+                } else {
+                    auxiliar = new String[]{automata[1][k]};
+                    row[k] = automata[1][k];
+                    agregarEstadosSeparados(auxiliar, rows);
+
+                }
+            }
+        }
+        rows.add(row);
+
+        String[][] array = new String[rows.size()][automata[1].length];
+        for (int i = 0; i < rows.size(); i++) {
+            String[] add = rows.get(i);
+            array[i] = add;
+        }
+        automata = array;
+    }
+
+    public void agregarEstadosSeparados(String[] auxiliar, ArrayList<String[]> rows) {
+        String[] row = new String[automata[1].length];
+        for (int j = 0; j < row.length; j++) {
+
+            if (j == 0) {
+                row[j] = String.join("", auxiliar);
+            } else if (j == 1) {
+                if (aceptacionArray(auxiliar)) {
+                    row[j] = "1";
+                } else {
+                    row[j] = "0";
+                }
+            } else {
+                String append = "";
+                boolean desvio;
+             
+                ArrayList<String> auxiliar2=new ArrayList<>();
+                if (auxiliar.length > 1) {
+                    for(String auxiliar1:auxiliar){
+                    append.concat(EncontrarTransicion(auxiliar1, Integer.parseInt(automata[0][j])));
+                    auxiliar2.add(append);
                     }
+                    row[j] =append;
+                    agregarEstadosSeparados(auxiliar2.toArray(new String[auxiliar2.size()]), rows);
+                    
+                } else {
+                     row[j] =EncontrarTransicion(auxiliar[0], Integer.parseInt(automata[0][j]));
+                     agregarEstadosSeparados(auxiliar, rows);
                     
                 }
+            }
+
+        }
+        rows.add(row);
+
+    }
+
+    public boolean aceptacionArray(String[] estados) {
+        boolean aceptacion = false;
+        for (String estado : estados) {
+            int i = EncontrarEstado(estado, automata);
+            if (automata[i][1].equals("1")) {
+                aceptacion = (aceptacion || true);
+
+            } else {
+                aceptacion = (aceptacion || false);
 
             }
-            rows.add(row);
-            row = new String[automata[1].length];
         }
-
+        return aceptacion;
     }*/
 
 }

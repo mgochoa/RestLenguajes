@@ -30,8 +30,20 @@ public class AutomataController {
     @RequestMapping(value = "/json", method = RequestMethod.POST)
     @ResponseBody
     public Pojo doSomething(@RequestBody Pojo input) throws IOException {
-       
-        
+
         return Utils.AutomataToPojo(Utils.PojoToAutomata(input));
     }
+
+    /*@RequestMapping(value = "/test", method = RequestMethod.POST)
+    @ResponseBody
+    public String[][] afndtoafd(@RequestBody Pojo input) throws IOException {
+        AutomataFinito a = new AutomataFinito(Utils.PojoToAutomata(input));
+        if (a.isAFND()) {
+            a.AFNDtoAFD();
+            return a.automata;
+        } else {
+              return a. automata;
+        }
+
+    }*/
 }
