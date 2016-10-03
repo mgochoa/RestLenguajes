@@ -15,6 +15,11 @@ public class AutomataFinito {
     public List<String> valoresPorParticion;
     String aux1, aux2;
 
+    public AutomataFinito(String[][] automata) {
+        this.automata = automata;
+    }
+    
+
     public AutomataFinito() {//constructor de ejemplo 
         automata = new String[6][4];
         //Cabeceras
@@ -357,5 +362,24 @@ public class AutomataFinito {
         }
 
         return nuevo;
+    }
+    
+    
+    
+    public Boolean isAFND(){
+       
+        
+        for(int i=1; i<automata.length;i++){
+            for(int j=2;j<automata[1].length;j++){
+                if(automata[i][j].contains(",")){
+                    return true;
+                }
+            }
+            
+        }
+      return false;  
+        
+        
+     
     }
 }

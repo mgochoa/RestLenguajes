@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import practica.Automata.AutomataFinito;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -32,5 +33,12 @@ public class AutomataController {
        
         
         return Utils.AutomataToPojo(Utils.PojoToAutomata(input));
+    }
+     @RequestMapping(value = "/isafnd", method = RequestMethod.POST)
+    @ResponseBody
+    public Boolean isAfnd(@RequestBody Pojo input) throws IOException {
+         AutomataFinito a = new AutomataFinito(Utils.PojoToAutomata(input));
+        
+        return a.isAFND();
     }
 }
