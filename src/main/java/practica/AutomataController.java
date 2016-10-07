@@ -3,6 +3,7 @@ package practica;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import practica.pojo.Pojo;
 import java.io.IOException;
+import java.util.Stack;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,15 +36,17 @@ public class AutomataController {
     }
 
     /*@RequestMapping(value = "/test", method = RequestMethod.POST)
-    @ResponseBody
-    public String[][] afndtoafd(@RequestBody Pojo input) throws IOException {
-        AutomataFinito a = new AutomataFinito(Utils.PojoToAutomata(input));
-        if (a.isAFND()) {
-            a.AFNDtoAFD();
-            return a.automata;
-        } else {
-              return a. automata;
-        }
+     @ResponseBody
+     public Stack afndtoafd(@RequestBody Pojo input) throws IOException {
+     AutomataFinito a = new AutomataFinito(Utils.PojoToAutomata(input));
+     if (a.isAFND()) {
+     a.AFNDtoAFD2();
+     return a.estadosNuevos;
+     } else {
+     return a.estadosNuevos;
+         
+     }
 
-    }*/
+        
+     }*/
 }
