@@ -20,6 +20,7 @@ public class AutomataController {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
     private ObjectMapper mapper = new ObjectMapper();
+   
 
     @RequestMapping("/greeting")
     public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
