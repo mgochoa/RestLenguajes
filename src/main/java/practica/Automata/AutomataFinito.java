@@ -2,6 +2,7 @@ package practica.Automata;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
@@ -20,7 +21,6 @@ public class AutomataFinito {
     Stack estadosNuevos;
     Stack estadosViejos;
     boolean particionDividida;
-   
 
     public AutomataFinito(String[][] automata) {
         this.automata = automata;
@@ -77,7 +77,6 @@ public class AutomataFinito {
         }
     }
 
-
     public boolean nuevoStack(Stack s, String o) {
         Stack stack = s;
 
@@ -95,9 +94,9 @@ public class AutomataFinito {
     }
 
     public void EliminarExtranos() {
-        estadosNuevos=new Stack();
-        estadosViejos=new Stack();
-        
+        estadosNuevos = new Stack();
+        estadosViejos = new Stack();
+
         int col = automata[1].length;
         String[] row = new String[automata[1].length];
         ArrayList<String[]> rows = new ArrayList<>();
@@ -117,41 +116,42 @@ public class AutomataFinito {
             row = new String[automata[1].length];
         }
         while (!estadosNuevos.empty()) {
-            boolean aceptacion=false;
-            
-            String estadoNuevo = (String) estadosNuevos.peek();
-            
-            for (int j = 0; j < col; j++) {
-                if (j == 0) {
-                    row[j] = estadoNuevo;
-                } else if (j == 1) {
-                    row[j] = automata[EncontrarEstado(estadoNuevo, automata)][1];
-                } else {
+            boolean aceptacion = false;
 
-                    row[j] = EncontrarTransicion(estadoNuevo, j);
-                    boolean first= (nuevoStack(estadosViejos, row[j]));
-                    boolean scnd= (nuevoStack(estadosNuevos, row[j]));
-                    boolean thrd=(!row[j].equals(estadoNuevo));
-                    if (first&scnd&thrd) {
-                        estadosViejos.add(estadosNuevos.pop());
-                        estadosNuevos.add(row[j]);
-                        aceptacion=true;
-                    }
+            String estadoNuevo = (String) estadosNuevos.peek();
+
+            for (int j = 0; j < col; j++) {
+                switch (j) {
+                    case 0:
+                        row[j] = estadoNuevo;
+                        break;
+                    case 1:
+                        row[j] = automata[EncontrarEstado(estadoNuevo, automata)][1];
+                        break;
+                    default:
+                        row[j] = EncontrarTransicion(estadoNuevo, j);
+                        boolean first = (nuevoStack(estadosViejos, row[j]));
+                        boolean scnd = (nuevoStack(estadosNuevos, row[j]));
+                        boolean thrd = (!row[j].equals(estadoNuevo));
+                        if (first & scnd & thrd) {
+                            estadosViejos.add(estadosNuevos.pop());
+                            estadosNuevos.add(row[j]);
+                            aceptacion = true;
+                        }
+                        break;
                 }
             }
-            if(!aceptacion){
+            if (!aceptacion) {
                 estadosViejos.add(estadosNuevos.pop());
             }
-            
+
             rows.add(row);
             row = new String[automata[1].length];
-            aceptacion=false;
+            aceptacion = false;
         }
 
         automata = rows.toArray(new String[rows.size()][automata[1].length]);
     }
-
-   
 
     public int EncontrarEstado(String estado, String[][] autom) {
         int cont = 0;
@@ -222,18 +222,18 @@ public class AutomataFinito {
 
         //Segundo: miro cada una de las transiciones de las particiones con los SE
         aux1 = "";
-        particionDividida= true;
-        while(particionDividida){
-        for (int i = 0; i < partNuevas.size(); i++) {
-            System.out.println("Voy en la particion: " + i);
-            for (int j = 2; j < automata[0].length; j++) {
-                System.out.println("particiones: " + partNuevas);
-                System.out.println("Valores: " + valoresPorParticion);
-                aux1 = IterarEntreParticiones(j, i);
-                aux1 = aux1.replaceAll(" ", "");
-                VerificarTransiciones(aux1, i);
+        particionDividida = true;
+        while (particionDividida) {
+            for (int i = 0; i < partNuevas.size(); i++) {
+                System.out.println("Voy en la particion: " + i);
+                for (int j = 2; j < automata[0].length; j++) {
+                    System.out.println("particiones: " + partNuevas);
+                    System.out.println("Valores: " + valoresPorParticion);
+                    aux1 = IterarEntreParticiones(j, i);
+                    aux1 = aux1.replaceAll(" ", "");
+                    VerificarTransiciones(aux1, i);
+                }
             }
-        }
         }
         System.out.println("Particiones simplificadas: " + valoresPorParticion);
         automata = CrearAutomataSimplificado();
@@ -331,8 +331,7 @@ public class AutomataFinito {
                     valoresPorParticion.add(cantidad, iterador);
                     auxiliar = auxiliar.replaceAll("" + auxiliar.charAt(0), "");
                 }
-            }
-            else{
+            } else {
                 particionDividida = false;
             }
         }
@@ -408,95 +407,134 @@ public class AutomataFinito {
 
     }
 
-    /*public void AFNDtoAFD() {
-     String[] row = new String[automata[1].length];
-     ArrayList<String[]> rows;
-     rows = new ArrayList<>();
-     String[] auxiliar = null;
-     //Estados iniciales
-     for (int i = 0; i < automata[1].length; i++) {
-     row[i] = automata[0][i];
+    public void AFNDTOAFD() {
+        estadosNuevos = new Stack();
+        estadosViejos = new Stack();
 
-     }
-     rows.add(row);
-     row = new String[automata[1].length];
+        int col = automata[1].length;
+        String[] row = new String[automata[1].length];
+        ArrayList<String[]> rows = new ArrayList<>();
 
-     for (int k = 0; k < automata[1].length; k++) {
-     if (k <= 1) {
-     row[k] = automata[1][k];
-     } else {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < col; j++) {
+                if (i == 0) {
+                    row[j] = automata[i][j];
+                } else if (i == 1 & j <= 1) {
+                    row[j] = automata[i][j];
+                } else if (i == 1 & j > 1) {
+                    if (automata[i][j].contains(",") & nuevoStack(estadosNuevos, automata[i][j].replace(",", ""))) {
+                        row[j] = automata[i][j].replace(",", "");
+                        estadosNuevos.add(row[j]);
 
-     if (automata[1][k].contains(",")) {
-     auxiliar = automata[1][k].split(",");
-     row[k] = automata[1][k].replaceAll(",", "");
-     agregarEstadosSeparados(auxiliar, rows);
-     } else {
-     auxiliar = new String[]{automata[1][k]};
-     row[k] = automata[1][k];
-     agregarEstadosSeparados(auxiliar, rows);
+                    } else if (nuevoStack(estadosNuevos, automata[i][j])) {
+                        row[j] = automata[i][j];
+                        estadosNuevos.add(row[j]);
+                    }
 
-     }
-     }
-     }
-     rows.add(row);
+                }
 
-     String[][] array = new String[rows.size()][automata[1].length];
-     for (int i = 0; i < rows.size(); i++) {
-     String[] add = rows.get(i);
-     array[i] = add;
-     }
-     automata = array;
-     }
+            }
+            rows.add(row);
+            row = new String[automata[1].length];
+        }
+        while (!estadosNuevos.empty()) {
+            boolean aceptacion = false;
 
-     public void agregarEstadosSeparados(String[] auxiliar, ArrayList<String[]> rows) {
-     String[] row = new String[automata[1].length];
-     for (int j = 0; j < row.length; j++) {
+            String estadoNuevo = (String) estadosNuevos.peek();
 
-     if (j == 0) {
-     row[j] = String.join("", auxiliar);
-     } else if (j == 1) {
-     if (aceptacionArray(auxiliar)) {
-     row[j] = "1";
-     } else {
-     row[j] = "0";
-     }
-     } else {
-     String append = "";
-     boolean desvio;
-             
-     ArrayList<String> auxiliar2=new ArrayList<>();
-     if (auxiliar.length > 1) {
-     for(String auxiliar1:auxiliar){
-     append.concat(EncontrarTransicion(auxiliar1, Integer.parseInt(automata[0][j])));
-     auxiliar2.add(append);
-     }
-     row[j] =append;
-     agregarEstadosSeparados(auxiliar2.toArray(new String[auxiliar2.size()]), rows);
-                    
-     } else {
-     row[j] =EncontrarTransicion(auxiliar[0], Integer.parseInt(automata[0][j]));
-     agregarEstadosSeparados(auxiliar, rows);
-                    
-     }
-     }
+            for (int j = 0; j < col; j++) {
+                switch (j) {
+                    case 0:
 
-     }
-     rows.add(row);
+                        row[j] = estadoNuevo;
 
-     }
+                        break;
+                    case 1:
+                        if (estadoNuevo.length() > 1) {
+                            boolean acept = false;
+                            for (String e : estadoNuevo.split("")) {
+                                if ((automata[EncontrarEstado(e, automata)][1].equals("1"))) {
+                                    acept = true;
+                                }
+                            }
+                            if (acept) {
+                                row[j] = "1";
+                            } else {
+                                row[j] = "0";
+                            }
 
-     public boolean aceptacionArray(String[] estados) {
-     boolean aceptacion = false;
-     for (String estado : estados) {
-     int i = EncontrarEstado(estado, automata);
-     if (automata[i][1].equals("1")) {
-     aceptacion = (aceptacion || true);
+                        } else {
+                            row[j] = automata[EncontrarEstado(estadoNuevo, automata)][1];
+                        }
+                        break;
+                    default:
+                        if (estadoNuevo.length() > 1) {
+                            String append = "";
+                            for (String e : estadoNuevo.split("")) {
+                                if (EncontrarTransicion(e, j).contains(",")) {
+                                    for (String es : EncontrarTransicion(e, j).split(",")) {
+                                        if (!append.contains(es)) {
+                                            append = append.concat(es);
+                                        }
+                                    }
 
-     } else {
-     aceptacion = (aceptacion || false);
+                                } else {
+                                    if (!append.contains(EncontrarTransicion(e, j))) {
+                                        append = append.concat(EncontrarTransicion(e, j));
+                                    }
+                                }
+                            }
 
-     }
-     }
-     return aceptacion;
-     }*/
+                            char[] ar = append.toCharArray();
+                            Arrays.sort(ar);
+                            String sorted = String.valueOf(ar);
+                            row[j] = sorted;
+                            boolean first = (nuevoStack(estadosViejos, row[j]));
+                            boolean scnd = (nuevoStack(estadosNuevos, row[j]));
+                            boolean thrd = (!row[j].equals(estadoNuevo));
+
+                            if (first & scnd & thrd) {
+                                if (estadosNuevos.peek().equals(estadoNuevo)) {
+                                    estadosViejos.add(estadosNuevos.pop());
+                                }
+
+                                estadosNuevos.add(row[j]);
+                                aceptacion = true;
+                            }
+
+                        } else {
+                            if (EncontrarTransicion(estadoNuevo, j).contains(",")) {
+                                char[] ar = EncontrarTransicion(estadoNuevo, j).replace(",", "").toCharArray();
+                                Arrays.sort(ar);
+                                String sorted = String.valueOf(ar);
+                                row[j] = sorted;
+                            } else {
+                                row[j] = EncontrarTransicion(estadoNuevo, j);
+                            }
+                            boolean first = (nuevoStack(estadosViejos, row[j]));
+                            boolean scnd = (nuevoStack(estadosNuevos, row[j]));
+                            boolean thrd = (!row[j].equals(estadoNuevo));
+                            if (first & scnd & thrd) {
+                                estadosViejos.add(estadosNuevos.pop());
+                                estadosNuevos.add(row[j]);
+                                aceptacion = true;
+                            }
+                        }
+                        break;
+
+                }
+            }
+            if (!aceptacion) {
+                estadosViejos.add(estadosNuevos.pop());
+            }
+
+            rows.add(row);
+            row = new String[automata[1].length];
+           
+        }
+
+        automata = rows.toArray(new String[rows.size()][automata[1].length]);
+    }
+    
+
 }
