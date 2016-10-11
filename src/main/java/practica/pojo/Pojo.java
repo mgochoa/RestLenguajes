@@ -12,7 +12,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
     "datos",
-    "simbolos"
+    "simbolos",
+    "automata"
 })
 public class Pojo {
 
@@ -20,7 +21,9 @@ public class Pojo {
     private List<Dato> datos = new ArrayList<Dato>();
     @JsonProperty("simbolos")
     private List<Simbolo> simbolos = new ArrayList<Simbolo>();
-
+    @JsonProperty("automata")
+    private boolean automata;
+    
     /**
      * 
      * @return
@@ -68,6 +71,25 @@ public class Pojo {
 
     public Pojo withSimbolos(List<Simbolo> simbolos) {
         this.simbolos = simbolos;
+        return this;
+    }
+    @JsonProperty("automata")
+    public Boolean getAutomata() {
+        return automata;
+    }
+
+    /**
+     * 
+     * @param automata
+     *     The automata
+     */
+    @JsonProperty("automata")
+    public void setAutomata(Boolean automata) {
+        this.automata = automata;
+    }
+
+    public Pojo withAutomata(Boolean automata) {
+        this.automata = automata;
         return this;
     }
 

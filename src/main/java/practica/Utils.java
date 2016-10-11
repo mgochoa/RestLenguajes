@@ -25,14 +25,16 @@ public class Utils {
         }
         for (int j = 1; j < automata.length; j++) {
             for (int k = 0; k < automata[1].length; k++) {
-                if (k == 0) {
-                    automata[j][k] = p.getDatos().get(j - 1).getData().get(k).getEs();
-                } else if (k == 1) {
-
-                    automata[j][k] = p.getDatos().get(j - 1).getAcept() ? "1" : "0";
-                } else {
-                    automata[j][k] = p.getDatos().get(j - 1).getData().get(k - 1).getEs();
-
+                switch (k) {
+                    case 0:
+                        automata[j][k] = p.getDatos().get(j - 1).getData().get(k).getEs();
+                        break;
+                    case 1:
+                        automata[j][k] = p.getDatos().get(j - 1).getAcept() ? "1" : "0";
+                        break;
+                    default:
+                        automata[j][k] = p.getDatos().get(j - 1).getData().get(k - 1).getEs();
+                        break;
                 }
             }
 
